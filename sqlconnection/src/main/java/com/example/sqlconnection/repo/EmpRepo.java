@@ -17,8 +17,8 @@ public interface EmpRepo extends JpaRepository<Emp, Long> {
 //	@Query("select e.ename, e.fk from Emp e,Dept d where e.fk=d.did")
 //	public List getResponse();
 	
-    @Query(value="select * from Emp e where e.fk= :department", nativeQuery = true)
-    List<Emp> getEmployeeDetails(@Param("department") long department);
+    @Query(value="select e from Emp e where e.fk= :department")
+    Emp getEmployeeDetails(@Param("department") long department);
     
     @Modifying
     @Transactional
@@ -27,7 +27,8 @@ public interface EmpRepo extends JpaRepository<Emp, Long> {
     
     @Modifying
     @Transactional
-    @Query(value = "update Emp e set e.salary=?2 where e.id=?1")
-    Object updateEmployeeDetails(long department,long sal);
+    @Query(value = "update Emp e set e.salary=:sal where e.id=:department")
+    Object updateEmployeeDetails(@Param("department") long department,@Param("sal")long sal);
+
       
 }

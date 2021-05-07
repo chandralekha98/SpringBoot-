@@ -22,7 +22,17 @@ public class Emp {
 	private String date;
 	@Column(name="salary")
 	private long salary;
+	@Column(name="fk")
+	private long fk;
 	
+	public long getFk() {
+		return fk;
+	}
+
+	public void setFk(long fk) {
+		this.fk = fk;
+	}
+
 	public Emp() {
 		super();
 		// TODO Auto-generated constructor stub

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.sqlconnection.empdetails.StatusResponse;
 import com.example.sqlconnection.empdetails.reqDetails;
 import com.example.sqlconnection.empdetails.requestDetails;
 import com.example.sqlconnection.empdetails.resDetails;
@@ -38,8 +39,12 @@ public class DeptController {
 	
 	@PostMapping("/updatesal/{id}")
 	public Object updateSalary(@PathVariable(value = "id") long id, @RequestBody resDetails res) {
-		
-		return emprepo.updateEmployeeDetails(id, res.getSalary());
+		StatusResponse status=new StatusResponse();
+		Object emp=emprepo.updateEmployeeDetails(id,res.getSalary());
+		if(emp!=null)
+			return status.getSucess();
+		else
+			return status.getFailed(); 
 	}
 
 	
@@ -48,9 +53,14 @@ public class DeptController {
 		return deptrepo.findAll();
 	}
 	@GetMapping("/dept/{fk}")
-	public List<Emp> getEmployeeDept (@PathVariable(value = "fk") long fk)
+	public String getEmployeeDept (@PathVariable(value = "id") long id)
 			{
-			return emprepo.getEmployeeDetails(fk);
+			StatusResponse status=new StatusResponse();
+			Emp emp=emprepo.getEmployeeDetails(id);
+			if(emp!=null)
+				return status.getDetailsFetched();
+			else
+				return status.getFailed();
 		}
 	
 	
@@ -67,11 +77,13 @@ public class DeptController {
 	@DeleteMapping("/delete/{fk}")
 	public Object deleteEmployeeDept (@PathVariable(value = "fk") long fk)
 			{
-			return emprepo.deleteEmployeeDetails(fk);
+			StatusResponse status=new StatusResponse();
+			Object emp=emprepo.deleteEmployeeDetails(fk);
+			System.out.println(emp);
+			if(emp!=null)
+				return status.getDeleteSuccess();
+			else
+				return status.getFailed();
 		}
 	
-	@PostMapping("/update/{id}/{salary}")
-	public Object updateEmpDet(@PathVariable(value = "id") long id, @PathVariable(value = "salary") long salary) {
-		return emprepo.updateEmployeeDetails(id,salary);
-	}
 }
